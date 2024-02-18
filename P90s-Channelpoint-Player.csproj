@@ -3,9 +3,28 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>P90s_Channelpoint_Player</RootNamespace>
+    <RootNamespace>P90Ez.ChannelpointPlayer</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Authors>P90Ez</Authors>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="P90's Twitch Library">
+      <HintPath>..\P90's Twitch Library\P90's Twitch Library\bin\Release\netcoreapp3.1\publish\P90's Twitch Library.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
 </Project>
