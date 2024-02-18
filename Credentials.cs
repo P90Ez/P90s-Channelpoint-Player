@@ -17,9 +17,9 @@ namespace P90Ez.ChannelpointPlayer
         internal Login.Credentials? TwitchTokens { get; private set; }
 
         private static readonly List<string> Scopes = new List<string>() { "channel:read:redemptions" };
-        internal bool RequestTokens()
+        internal bool RequestTokens(ILogger logger)
         {
-            TwitchTokens = Login.ImplicitGrantFlow(ClientID, Scopes);
+            TwitchTokens = Login.ImplicitGrantFlow(ClientID, Scopes, logger);
             return TwitchTokens.IsSuccess;
         }
     }

@@ -22,9 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="P90's Twitch Library">
-      <HintPath>..\P90's Twitch Library\P90's Twitch Library\bin\Release\netcoreapp3.1\publish\P90's Twitch Library.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\P90's Twitch Library\P90's Twitch Library\P90's Twitch Library.csproj" />
   </ItemGroup>
 
 </Project>
