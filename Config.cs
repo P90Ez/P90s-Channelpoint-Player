@@ -10,6 +10,6 @@ namespace P90Ez.ChannelpointPlayer
     {
         public double SoundVolume { get; set; }
 
-        public List<WebsocketConnection> WebsocketConnections { get; set; } = new List<WebsocketConnection>();
+        public bool EnableWebsocketServer { get; set; } = false;
     }
 }
