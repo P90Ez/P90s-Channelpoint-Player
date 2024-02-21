@@ -8,7 +8,7 @@ namespace P90Ez.ChannelpointPlayer
 {
     public static class Scopes
     {
-        public static readonly string ReadCPRedemtions = "channel:read:redemptions";
-        public static readonly string ManageCPRedemtions = "channel:manage:redemptions";
+        public static readonly string ReadCPRedemtions = Twitch.EventSub.Events.ChannelPoints.RequiredScopes;
+        public static readonly string ManageCPRedemtions = Twitch.API.Endpoints.UpdateCustomReward.RequieredScopes;
     }
 }

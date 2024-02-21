@@ -1,4 +1,5 @@
-﻿using P90Ez.Twitch;
+﻿using P90Ez.Extensions;
+using P90Ez.Twitch;
 using P90Ez.Twitch.EventSub;
 
 namespace P90Ez.ChannelpointPlayer
@@ -9,6 +10,7 @@ namespace P90Ez.ChannelpointPlayer
         public static readonly string ConfigFile = "Config.json";
 
         public static Logger Logger = new Logger();
+        public static Server? WSServer;
 
         static void Main(string[] args)
         {
@@ -35,17 +37,27 @@ namespace P90Ez.ChannelpointPlayer
             if(Config == null)
             {
                 Logger.Log("Failed to read login! Press any key to exit...", ILogger.Severety.Critical);
-                Console.ReadLine();
+                Console.ReadKey();
                 return;
             }
             #endregion
             #region Credentials
+
+            Console.WriteLine(
+                "\n" +
+                "----------\n" +
+                "ATTENTION! Make sure your browser window is NOT shown on stream, your token will get leaked.\n" +
+                "To continue to authentication press enter.\n" +
+                "----------"
+                );
+            Console.ReadLine();
+
             Logger.Log("Requesting auth token...", ILogger.Severety.Message);
 
             if(!Config.RequestTokens(redemtions.GetScopes(), Logger) || Config.Credentials == null)
             {
                 Logger.Log("Request to get an auth token failed! Press any key to exit...", ILogger.Severety.Critical);
-                Console.ReadLine();
+                Console.ReadKey();
                 return;
             }
 
@@ -59,7 +71,13 @@ namespace P90Ez.ChannelpointPlayer
 
             Logger.Log($"Channel id is {ChannelID}.", ILogger.Severety.Message);
 
-            Logger.Log("Starting listening to Channelpoint redemtions...", ILogger.Severety.Message);
+            if(Config.EnableWebsocketServer && Config.WebsocketPort > 0)
+            {
+                Logger.Log($"Starting WS server on port {Config.WebsocketPort}...", ILogger.Severety.Message);
+                WSServer = new Server(Config.WebsocketPort, Logger);
+            }
+
+            Logger.Log("Start listening to Channelpoint redemtions...", ILogger.Severety.Message);
 
             EventSubInstance EventSub = new EventSubInstance(Config.Credentials, Logger);
             EventSub.Add_ChannelPoints(ChannelID.ToString()).RewardRedeemed += CP_RewardRedeemed;
@@ -70,6 +88,11 @@ namespace P90Ez.ChannelpointPlayer
         private static void CP_RewardRedeemed(object? sender, Twitch.EventSub.Events.ChannelPoints.ChannelPoints_RedemptionEvent e)
         {
             Logger.Log($"{e.UserName} redeemed {e.Reward.Title}!", ILogger.Severety.Message);
+
+            if (WSServer != null)
+                WSServer.Broadcast(e.ToJsonString()); //broadcasts to all connections
+
+            //TODO add audio playback
         }
     }
 }
